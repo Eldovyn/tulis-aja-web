@@ -2,8 +2,9 @@
 
 <template>
     <nav class="navbar bg-base-100 shadow-sm">
-        <div class="flex-1">
+        <div class="flex-1 flex-row">
             <a class="btn btn-ghost text-xl">tulis.aja</a>
+            <p class="text-sm ps-5 text-gray-500">12 Notes</p>
         </div>
         <div class="flex-none">
             <div class="dropdown dropdown-end">
