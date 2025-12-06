@@ -3,8 +3,8 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 
 const routes = [
-    { path: '/', component: Home, },
-    { path: '/login', component: Login, },
+    { path: '/', component: Home, meta: { showNavbar: true } },
+    { path: '/login', component: Login, meta: { showNavbar: false } },
 ]
 
 const router = createRouter({
