@@ -41,7 +41,7 @@ import { BxRegularSave } from 'vue-icons-lib/bx';
                             <Input placeholder="Note Title" class="w-full" />
                         </div>
                         <div class="flex flex-col gap-2">
-                            <Label class="pe-2">Title</Label>
+                            <Label class="pe-2">Note</Label>
                             <Textarea placeholder="Your Note" class="w-full" />
                         </div>
                         <Separator />
