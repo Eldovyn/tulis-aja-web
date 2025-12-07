@@ -17,13 +17,50 @@ import { BxRegularSave } from 'vue-icons-lib/bx';
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { cards, selectedCard } from '@/stores/card';
+import { ref, reactive } from 'vue';
 
-const cards = Array.from({ length: 12 }, (_, i) => i + 1);
+const isOpen = ref(false);
+const isSubmitting = ref(false);
+
+const form = reactive({
+    title: '',
+    note: '',
+});
+
+const openDialog = (card?: Card) => {
+    if (card) {
+        selectedCard.value = card;
+        form.title = card.title;
+        form.note = card.description;
+    } else {
+        selectedCard.value = null;
+        form.title = '';
+        form.note = '';
+    }
+
+    isOpen.value = true;
+};
+
+const closeDialog = () => {
+    isOpen.value = false;
+    selectedCard.value = null;
+    form.title = '';
+    form.note = '';
+};
+
+const onSubmit = () => {
+    if (isSubmitting.value) return;
+    isSubmitting.value = true;
+
+    closeDialog();
+    isSubmitting.value = false;
+};
 </script>
 
 <template>
@@ -34,30 +71,35 @@ const cards = Array.from({ length: 12 }, (_, i) => i + 1);
 
                 <CgSearch class="absolute top-3 left-3 translate-y-[-1.2px]" />
             </div>
-            <Dialog>
+            <Dialog v-model:open="isOpen">
                 <DialogTrigger asChild>
-                    <Button class="flex flex-row gap-5 cursor-pointer">
+                    <Button class="flex flex-row gap-5 cursor-pointer" @click="openDialog()">
                         <BxRegularPlus />
                         New Note
                     </Button>
                 </DialogTrigger>
+
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create New Note</DialogTitle>
+                        <DialogTitle>
+                            {{ selectedCard ? 'Edit Note' : 'Create New Note' }}
+                        </DialogTitle>
                     </DialogHeader>
-                    <form action="" class="flex flex-col gap-3">
+                    <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
                         <div class="flex flex-col gap-2">
                             <Label class="pe-2">Title</Label>
-                            <Input placeholder="Note Title" class="w-full" />
+                            <Input v-model="form.title" placeholder="Note Title" class="w-full" />
                         </div>
                         <div class="flex flex-col gap-2">
                             <Label class="pe-2">Note</Label>
-                            <Textarea placeholder="Your Note" class="w-full" />
+                            <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
                         </div>
                         <Separator />
                         <div class="flex flex-row justify-end gap-5">
-                            <Button variant="outline">Cancel</Button>
-                            <Button class="flex flex-row">
+                            <Button variant="outline" type="button" @click="closeDialog">
+                                Cancel
+                            </Button>
+                            <Button class="flex flex-row" type="submit">
                                 <BxRegularSave class="mr-3" />
                                 Save
                             </Button>
@@ -68,19 +110,22 @@ const cards = Array.from({ length: 12 }, (_, i) => i + 1);
         </div>
         <br>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pe-2 ps-6">
-            <Card v-for="card in cards" :key="card" class="border rounded-lg shadow-sm">
+            <Card v-for="card in cards" :key="card.id" class="border rounded-lg shadow-sm cursor-pointer"
+                @click="openDialog(card)">
                 <CardHeader>
-                    <CardTitle>Card Title {{ card }}</CardTitle>
-                    <CardDescription>Card Description {{ card }}</CardDescription>
+                    <CardTitle>Card Title {{ card.title }}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <p>Card Content {{ card }}</p>
+                <CardContent class="line-clamp-4">
+                    {{ card.description }}
                 </CardContent>
-                <CardFooter>
-                    <p>Card Footer {{ card }}</p>
+                <CardFooter class="flex flex-row flex-wrap gap-2">
+                    <Badge v-for="tag in card.tags" :key="tag" variant="outline">
+                        {{ tag }}
+                    </Badge>
                 </CardFooter>
             </Card>
         </div>
+        <br>
     </div>
 </template>
 
