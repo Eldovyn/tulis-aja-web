@@ -1,4 +1,3 @@
-// src/composables/useNamaContract.ts
 import { BrowserProvider, Contract } from "ethers";
 import { ref } from "vue";
 
@@ -33,17 +32,19 @@ export function useContoh1Contract(connectedWallet: any) {
     const loading = ref(false);
     const error = ref<string | null>(null);
 
-    const getContract = async () => {
+    const getContract = async (): Promise<Contoh1Contract> => {
         if (!connectedWallet.value) {
             throw new Error("Wallet belum connect");
         }
 
-        const provider = new BrowserProvider(
-            connectedWallet.value.provider as any
-        );
+        const provider = new BrowserProvider(connectedWallet.value.provider as any);
         const signer = await provider.getSigner();
 
-        return new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer) as any;
+        return new Contract(
+            CONTRACT_ADDRESS,
+            CONTRACT_ABI,
+            signer
+        ) as unknown as Contoh1Contract;
     };
 
     const readNama = async () => {
