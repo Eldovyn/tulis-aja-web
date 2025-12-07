@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-    <nav class="navbar bg-gray-10 shadow-sm">
+    <nav class="navbar fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
         <div class="flex-1 flex-row">
             <a class="btn btn-ghost text-xl">tulis.aja</a>
             <p class="text-sm ps-5 text-gray-500">12 Notes</p>
@@ -14,7 +14,7 @@
                             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                     </div>
                 </div>
-                <ul tabindex="-1" class="menu menu-sm dropdown-content bg-gray-10 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                <ul tabindex="-1" class="menu menu-sm dropdown-content bg-white rounded-box z-1 mt-3 w-52 p-2 shadow">
                     <li>
                         <a class="justify-between">
                             Profile

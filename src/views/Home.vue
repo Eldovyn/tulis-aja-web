@@ -64,69 +64,71 @@ const onSubmit = () => {
 </script>
 
 <template>
-    <div class="min-h-screen w-full">
-        <div class="flex justify-between pe-2 ps-6 mt-10">
-            <div class="relative w-70">
-                <Input placeholder="Search your notes" class="w-full pl-12" />
+    <main class="pt-16">
+        <div class="min-h-screen w-full">
+            <div class="flex justify-between pe-2 ps-6 mt-10">
+                <div class="relative w-70">
+                    <Input placeholder="Search your notes" class="w-full pl-12" />
 
-                <CgSearch class="absolute top-3 left-3 translate-y-[-1.2px]" />
+                    <CgSearch class="absolute top-3 left-3 translate-y-[-1.2px]" />
+                </div>
+                <Dialog v-model:open="isOpen">
+                    <DialogTrigger asChild>
+                        <Button class="flex flex-row gap-5 cursor-pointer" @click="openDialog()">
+                            <BxRegularPlus />
+                            New Note
+                        </Button>
+                    </DialogTrigger>
+
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>
+                                {{ selectedCard ? 'Edit Note' : 'Create New Note' }}
+                            </DialogTitle>
+                        </DialogHeader>
+                        <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
+                            <div class="flex flex-col gap-2">
+                                <Label class="pe-2">Title</Label>
+                                <Input v-model="form.title" placeholder="Note Title" class="w-full" />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <Label class="pe-2">Note</Label>
+                                <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
+                            </div>
+                            <Separator />
+                            <div class="flex flex-row justify-end gap-5">
+                                <Button variant="outline" type="button" @click="closeDialog">
+                                    Cancel
+                                </Button>
+                                <Button class="flex flex-row" type="submit">
+                                    <BxRegularSave class="mr-3" />
+                                    Save
+                                </Button>
+                            </div>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
-            <Dialog v-model:open="isOpen">
-                <DialogTrigger asChild>
-                    <Button class="flex flex-row gap-5 cursor-pointer" @click="openDialog()">
-                        <BxRegularPlus />
-                        New Note
-                    </Button>
-                </DialogTrigger>
-
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>
-                            {{ selectedCard ? 'Edit Note' : 'Create New Note' }}
-                        </DialogTitle>
-                    </DialogHeader>
-                    <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
-                        <div class="flex flex-col gap-2">
-                            <Label class="pe-2">Title</Label>
-                            <Input v-model="form.title" placeholder="Note Title" class="w-full" />
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <Label class="pe-2">Note</Label>
-                            <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
-                        </div>
-                        <Separator />
-                        <div class="flex flex-row justify-end gap-5">
-                            <Button variant="outline" type="button" @click="closeDialog">
-                                Cancel
-                            </Button>
-                            <Button class="flex flex-row" type="submit">
-                                <BxRegularSave class="mr-3" />
-                                Save
-                            </Button>
-                        </div>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <br>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pe-2 ps-6">
+                <Card v-for="card in cards" :key="card.id" class="border rounded-lg shadow-sm cursor-pointer"
+                    @click="openDialog(card)">
+                    <CardHeader>
+                        <CardTitle>Card Title {{ card.title }}</CardTitle>
+                    </CardHeader>
+                    <CardContent class="line-clamp-4">
+                        {{ card.description }}
+                    </CardContent>
+                    <CardFooter class="flex flex-row flex-wrap gap-2">
+                        <Badge v-for="tag in card.tags" :key="tag" variant="outline">
+                            {{ tag }}
+                        </Badge>
+                    </CardFooter>
+                </Card>
+            </div>
+            <br>
         </div>
-        <br>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pe-2 ps-6">
-            <Card v-for="card in cards" :key="card.id" class="border rounded-lg shadow-sm cursor-pointer"
-                @click="openDialog(card)">
-                <CardHeader>
-                    <CardTitle>Card Title {{ card.title }}</CardTitle>
-                </CardHeader>
-                <CardContent class="line-clamp-4">
-                    {{ card.description }}
-                </CardContent>
-                <CardFooter class="flex flex-row flex-wrap gap-2">
-                    <Badge v-for="tag in card.tags" :key="tag" variant="outline">
-                        {{ tag }}
-                    </Badge>
-                </CardFooter>
-            </Card>
-        </div>
-        <br>
-    </div>
+    </main>
 </template>
 
 <style scoped></style>
