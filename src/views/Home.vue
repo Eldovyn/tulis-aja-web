@@ -73,14 +73,11 @@ const onSubmit = () => {
 
                     <CgSearch class="absolute top-3 left-3 translate-y-[-1.2px]" />
                 </div>
+                <Button class="flex flex-row gap-5 cursor-pointer" @click="openDialog()">
+                    <BxRegularPlus />
+                    New Note
+                </Button>
                 <Dialog v-model:open="isOpen">
-                    <DialogTrigger asChild>
-                        <Button class="flex flex-row gap-5 cursor-pointer" @click="openDialog()">
-                            <BxRegularPlus />
-                            New Note
-                        </Button>
-                    </DialogTrigger>
-
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>
