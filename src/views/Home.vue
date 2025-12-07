@@ -64,7 +64,7 @@ const onSubmit = () => {
 </script>
 
 <template>
-    <div class="h-screen w-full">
+    <div class="min-h-screen w-full">
         <div class="flex justify-between pe-2 ps-6 mt-10">
             <div class="relative w-70">
                 <Input placeholder="Search your notes" class="w-full pl-12" />
