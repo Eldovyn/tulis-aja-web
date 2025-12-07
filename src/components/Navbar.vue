@@ -1,10 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { cards } from '@/stores/card';
+</script>
 
 <template>
     <nav class="navbar fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
         <div class="flex-1 flex-row">
             <a class="btn btn-ghost text-xl">tulis.aja</a>
-            <p class="text-sm ps-5 text-gray-500">12 Notes</p>
+            <p class="text-sm ps-5 text-gray-500">{{ cards.length }} Notes</p>
         </div>
         <div class="flex-none">
             <div class="dropdown dropdown-end">
