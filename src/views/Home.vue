@@ -23,7 +23,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { cards, selectedCard } from '@/stores/card';
 import { ref, reactive } from 'vue';
-import { BxRegularTrash } from 'vue-icons-lib/bx'
+import { BxRegularTrash, BxSolidBot } from 'vue-icons-lib/bx'
 
 const isOpen = ref(false);
 const isSubmitting = ref(false);
@@ -93,12 +93,36 @@ const onSubmit = () => {
                                 <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
                             </div>
                             <Separator />
+                            <div class="flex flex-col gap-2">
+                                <Label class="pe-2">Ai Summary</Label>
+                                <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
+                            </div>
+                            <Separator />
                             <div class="flex flex-row justify-between gap-5">
                                 <Button variant="destructive" type="button" v-if="selectedCard">
                                     <BxRegularTrash class="mr-3" />
                                     Delete
                                 </Button>
-                                <div class="flex gap-5 justify-end w-full">
+                                <div class="flex gap-5 justify-between w-full" v-if="!selectedCard">
+                                    <div class="flex" v-if="!selectedCard">
+                                        <Button
+                                            class="w-full bg-white text-black border-gray-300 border hover:bg-gray-100 cursor-pointer"
+                                            type="submit">
+                                            <BxSolidBot class="mr-3" />
+                                            Generate AI Summary
+                                        </Button>
+                                    </div>
+                                    <div class="flex flex-row gap-3">
+                                        <Button variant="outline" type="button" @click="closeDialog">
+                                            Cancel
+                                        </Button>
+                                        <Button class="flex flex-row" type="submit">
+                                            <BxRegularSave class="mr-3" />
+                                            Save
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-row gap-3" v-else>
                                     <Button variant="outline" type="button" @click="closeDialog">
                                         Cancel
                                     </Button>
