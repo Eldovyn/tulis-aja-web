@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
-import Coba from '@/views/Coba.vue'
 
 const routes = [
     { path: '/', component: Home, meta: { showNavbar: true } },
     { path: '/login', component: Login, meta: { showNavbar: false } },
-    { path: '/Coba', component: Coba, meta: { showNavbar: false } },
 ]
 
 const router = createRouter({
