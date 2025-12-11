@@ -47,9 +47,9 @@ function toggleShowPassword() {
                     </div>
 
                     <p class="w-[90%] mx-auto text-right -mt-1">
-                        <span class="text-blue-500 cursor-pointer text-sm hover:underline">
+                        <a class="text-blue-500 cursor-pointer text-sm hover:underline" href="/forgot-password">
                             Forgot Password?
-                        </span>
+                        </a>
                     </p>
                 </div>
 
@@ -57,9 +57,9 @@ function toggleShowPassword() {
                 <Button class="w-[90%] mx-auto cursor-pointer">Login</Button>
             </div>
 
-            <div id="footer" class="pe-[5%]">
-                <p class="text-end text-sm text-gray-500">Don't have an account? <span
-                        class="font-semibold hover:underline cursor-pointer text-black">Sign Up</span>
+            <div id="footer" class="pe-[5%] -mt-3">
+                <p class="text-end text-sm text-gray-500">Don't have an account? <a
+                        class="font-semibold hover:underline cursor-pointer text-black" href="/register">Sign Up</a>
                 </p>
             </div>
         </form>

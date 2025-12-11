@@ -85,13 +85,12 @@ function toggleShowConfirmPassword() {
                 </Button>
             </div>
 
-            <!-- FOOTER -->
-            <div id="footer" class="pe-[5%]">
+            <div id="footer" class="pe-[5%] -mt-3">
                 <p class="text-end text-sm text-gray-500">
                     Already have an account?
-                    <span class="font-semibold hover:underline cursor-pointer text-black">
+                    <a class="font-semibold hover:underline cursor-pointer text-black" href="/login">
                         Sign In
-                    </span>
+                    </a>
                 </p>
             </div>
         </form>
