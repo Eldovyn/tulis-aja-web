@@ -191,25 +191,30 @@ watchEffect(() => {
 
                 <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <Card v-for="card in cards" :key="card.id"
-                        class="group cursor-pointer border bg-white rounded-2xl shadow-sm transition hover:shadow-md hover:-translate-y-px"
+                        class="group cursor-pointer border bg-white rounded-2xl shadow-sm transition hover:shadow-md hover:-translate-y-px flex flex-col h-full"
                         @click="openDialog(card)">
-                        <CardHeader class="pb-3">
-                            <div class="flex items-start justify-between gap-3">
-                                <CardTitle class="text-base font-semibold text-slate-900 line-clamp-1">
-                                    {{ card.title }}
-                                </CardTitle>
+                        <CardHeader class="pb-3 overflow-hidden">
+                            <div class="flex justify-between items-center gap-4 min-w-0">
+                                <div class="min-w-0 flex-1">
+                                    <CardTitle class="text-base font-semibold tracking-tight text-slate-900">
+                                        <span class="block min-w-0 truncate">
+                                            {{ card.title }}
+                                        </span>
+                                    </CardTitle>
+                                </div>
 
-                                <span class="text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition">
+                                <span
+                                    class="shrink-0 text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition">
                                     Click to edit
                                 </span>
                             </div>
                         </CardHeader>
 
-                        <CardContent class="text-sm text-slate-600 leading-relaxed line-clamp-4">
+                        <CardContent class="text-sm text-slate-600 leading-relaxed line-clamp-4 min-h-[92px]">
                             {{ card.content }}
                         </CardContent>
 
-                        <CardFooter class="flex flex-row flex-wrap gap-2 pt-4">
+                        <CardFooter class="mt-auto flex flex-row flex-wrap gap-2 pt-4">
                             <Badge v-for="tag in card.tags" :key="tag" variant="outline" class="rounded-full">
                                 {{ tag }}
                             </Badge>
