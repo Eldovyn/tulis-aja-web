@@ -65,97 +65,141 @@ const onSubmit = () => {
 
 <template>
     <main class="pt-16">
-        <div class="min-h-screen w-full">
-            <div class="flex justify-between pe-2 ps-6 mt-10">
-                <div class="relative w-70">
-                    <Input placeholder="Search your notes" class="w-full pl-12" />
+        <div class="min-h-[calc(100vh-4rem)] w-full bg-slate-50">
+            <section class="sticky top-16 z-10 border-b bg-slate-50/80 backdrop-blur">
+                <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 py-4">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="min-w-0">
+                            <h1 class="text-xl font-semibold tracking-tight text-slate-900">Notes</h1>
+                            <p class="text-sm text-slate-500">Create, edit, and organize your notes.</p>
+                        </div>
 
-                    <CgSearch class="absolute top-3 left-3 translate-y-[-1.2px]" />
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end sm:w-[60%]">
+                            <div class="relative w-full sm:max-w-md">
+                                <Input placeholder="Search your notes" class="w-full pl-11" />
+                                <CgSearch
+                                    class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                            </div>
+
+                            <Button class="gap-2 cursor-pointer shrink-0" @click="openDialog()">
+                                <BxRegularPlus />
+                                New Note
+                            </Button>
+                        </div>
+                    </div>
                 </div>
-                <Button class="flex flex-row gap-5 cursor-pointer" @click="openDialog()">
-                    <BxRegularPlus />
-                    New Note
-                </Button>
-                <Dialog v-model:open="isOpen">
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>
-                                {{ selectedCard ? 'Edit Note' : 'Create New Note' }}
-                            </DialogTitle>
-                        </DialogHeader>
-                        <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
-                            <div class="flex flex-col gap-2">
-                                <Label class="pe-2">Title</Label>
-                                <Input v-model="form.title" placeholder="Note Title" class="w-full" />
+            </section>
+
+            <section class="mx-auto w-full max-w-6xl px-4 sm:px-6 py-6">
+                <div v-if="cards.length === 0" class="rounded-2xl border border-dashed bg-white p-10 text-center">
+                    <div
+                        class="mx-auto mb-3 h-12 w-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center">
+                        <BxRegularPlus />
+                    </div>
+                    <h2 class="text-lg font-semibold text-slate-900">No notes yet</h2>
+                    <p class="mt-1 text-sm text-slate-500">Create your first note to get started.</p>
+                    <Button class="mt-5 gap-2" @click="openDialog()">
+                        <BxRegularPlus />
+                        Create Note
+                    </Button>
+                </div>
+
+                <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Card v-for="card in cards" :key="card.id"
+                        class="group cursor-pointer border bg-white rounded-2xl shadow-sm transition hover:shadow-md hover:-translate-y-px"
+                        @click="openDialog(card)">
+                        <CardHeader class="pb-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <CardTitle class="text-base font-semibold text-slate-900 line-clamp-1">
+                                    {{ card.title }}
+                                </CardTitle>
+
+                                <span class="text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition">
+                                    Click to edit
+                                </span>
                             </div>
-                            <div class="flex flex-col gap-2">
-                                <Label class="pe-2">Note</Label>
-                                <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
+                        </CardHeader>
+
+                        <CardContent class="text-sm text-slate-600 leading-relaxed line-clamp-4">
+                            {{ card.description }}
+                        </CardContent>
+
+                        <CardFooter class="flex flex-row flex-wrap gap-2 pt-4">
+                            <Badge v-for="tag in card.tags" :key="tag" variant="outline" class="rounded-full">
+                                {{ tag }}
+                            </Badge>
+                        </CardFooter>
+                    </Card>
+                </div>
+            </section>
+
+            <Dialog v-model:open="isOpen">
+                <DialogContent class="sm:max-w-xl">
+                    <DialogHeader class="space-y-1">
+                        <DialogTitle class="text-lg">
+                            {{ selectedCard ? 'Edit Note' : 'Create New Note' }}
+                        </DialogTitle>
+                        <p class="text-sm text-slate-500">
+                            {{ selectedCard ? 'Update your note details below.' : 'Fill in the note details below.' }}
+                        </p>
+                    </DialogHeader>
+
+                    <form class="mt-4 flex flex-col gap-4" @submit.prevent="onSubmit">
+                        <div class="grid gap-4">
+                            <div class="grid gap-2">
+                                <Label class="text-slate-700">Title</Label>
+                                <Input v-model="form.title" placeholder="e.g. Meeting notes" class="w-full" />
                             </div>
+
+                            <div class="grid gap-2">
+                                <Label class="text-slate-700">Note</Label>
+                                <Textarea v-model="form.note" placeholder="Write your note here…"
+                                    class="min-h-[110px] w-full" />
+                            </div>
+
                             <Separator />
-                            <div class="flex flex-col gap-2">
-                                <Label class="pe-2">Ai Summary</Label>
-                                <Textarea v-model="form.note" placeholder="Your Note" class="w-full" />
-                            </div>
-                            <Separator />
-                            <div class="flex flex-row justify-between gap-5">
-                                <Button variant="destructive" type="button" v-if="selectedCard">
-                                    <BxRegularTrash class="mr-3" />
-                                    Delete
-                                </Button>
-                                <div class="flex gap-5 justify-between w-full" v-if="!selectedCard">
-                                    <div class="flex" v-if="!selectedCard">
-                                        <Button
-                                            class="w-full bg-white text-black border-gray-300 border hover:bg-gray-100 cursor-pointer"
-                                            type="submit">
-                                            <BxSolidBot class="mr-3" />
-                                            Generate AI Summary
-                                        </Button>
+
+                            <div class="rounded-2xl border bg-slate-50 p-4" v-if="selectedCard">
+                                <div class="mb-2 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <BxSolidBot class="text-slate-700" />
+                                        <Label class="text-slate-700">AI Summary</Label>
                                     </div>
-                                    <div class="flex flex-row gap-3">
-                                        <Button variant="outline" type="button" @click="closeDialog">
-                                            Cancel
-                                        </Button>
-                                        <Button class="flex flex-row" type="submit">
-                                            <BxRegularSave class="mr-3" />
-                                            Save
-                                        </Button>
-                                    </div>
+                                    <span class="text-xs text-slate-500">Generated preview</span>
                                 </div>
-                                <div class="flex flex-row gap-3" v-else>
-                                    <Button variant="outline" type="button" @click="closeDialog">
+
+                                <Textarea v-model="form.note" placeholder="AI summary will appear here…"
+                                    class="min-h-[90px] w-full" />
+                            </div>
+                        </div>
+
+                        <Separator />
+
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <Button variant="destructive" type="button" v-if="selectedCard" class="gap-2">
+                                <BxRegularTrash class="mr-0" />
+                                Delete
+                            </Button>
+
+                            <div class="flex flex-col gap-3 sm:flex-row sm:justify-end sm:ml-auto w-full">
+                                <div class="flex gap-3 w-full sm:w-auto justify-end">
+                                    <Button variant="outline" type="button" class="w-full sm:w-auto"
+                                        @click="closeDialog">
                                         Cancel
                                     </Button>
-                                    <Button class="flex flex-row" type="submit">
-                                        <BxRegularSave class="mr-3" />
+                                    <Button class="w-full sm:w-auto gap-2" type="submit">
+                                        <BxRegularSave class="mr-0" />
                                         Save
                                     </Button>
                                 </div>
                             </div>
-                        </form>
-                    </DialogContent>
-                </Dialog>
-            </div>
-            <br>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pe-2 ps-6">
-                <Card v-for="card in cards" :key="card.id" class="border rounded-lg shadow-sm cursor-pointer"
-                    @click="openDialog(card)">
-                    <CardHeader>
-                        <CardTitle>Card Title {{ card.title }}</CardTitle>
-                    </CardHeader>
-                    <CardContent class="line-clamp-4">
-                        {{ card.description }}
-                    </CardContent>
-                    <CardFooter class="flex flex-row flex-wrap gap-2">
-                        <Badge v-for="tag in card.tags" :key="tag" variant="outline">
-                            {{ tag }}
-                        </Badge>
-                    </CardFooter>
-                </Card>
-            </div>
-            <br>
+                        </div>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     </main>
 </template>
+
 
 <style scoped></style>
