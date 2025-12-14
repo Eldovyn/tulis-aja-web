@@ -22,79 +22,102 @@ function toggleShowConfirmPassword() {
 </script>
 
 <template>
-    <div class="h-screen w-full bg-[#EEF2F5] flex justify-center items-center">
-        <form class="bg-white w-[30%] rounded-md p-10 flex flex-col gap-5">
-            <div id="header" class="flex flex-col gap-1">
-                <h1 class="text-2xl font-bold text-center">Create your account</h1>
-                <p class="text-sm text-gray-500 text-center">
-                    Sign up to get started
-                </p>
-            </div>
+    <main
+        class="min-h-screen w-full bg-linear-to-b from-slate-50 to-slate-100 flex items-center justify-center px-4 py-10">
+        <div class="w-full max-w-md">
+            <form class="bg-white rounded-2xl ring-1 ring-black/5 p-6 sm:p-8 space-y-6" autocomplete="on">
+                <header class="text-center space-y-2">
+                    <h1 class="text-2xl font-bold tracking-tight text-slate-900">
+                        Create your account
+                    </h1>
 
-            <div id="body" class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
-                    <Label class="ps-[5%]">Email</Label>
-                    <div class="relative w-[90%] mx-auto">
-                        <AiOutlineMail class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2" />
-                        <Input type="email" placeholder="Enter your email" class="w-full pl-10" />
+                    <p class="text-sm text-slate-500">
+                        Sign up to get started
+                    </p>
+                </header>
+
+                <section class="space-y-4">
+                    <div class="space-y-2">
+                        <Label class="ps-1 text-slate-700" for="email">Email</Label>
+                        <div class="relative">
+                            <AiOutlineMail
+                                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                                placeholder="name@company.com" class="w-full pl-10" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex flex-col gap-2">
-                    <Label class="ps-[5%]">Username</Label>
-                    <div class="relative w-[90%] mx-auto">
-                        <AiOutlineUser class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2" />
-                        <Input type="email" placeholder="Enter your username" class="w-full pl-10" />
+                    <div class="space-y-2">
+                        <Label class="ps-1 text-slate-700" for="username">Username</Label>
+                        <div class="relative">
+                            <AiOutlineUser
+                                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Input id="username" name="username" type="text" autocomplete="username"
+                                placeholder="Enter your username" class="w-full pl-10" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex flex-col gap-2">
-                    <Label class="ps-[5%]">Password</Label>
-                    <div class="relative w-[90%] mx-auto">
-                        <BxSolidLockAlt class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2" />
+                    <div class="space-y-2">
+                        <Label class="ps-1 text-slate-700" for="password">Password</Label>
+                        <div class="relative">
+                            <BxSolidLockAlt
+                                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
 
-                        <Input :type="showPassword ? 'text' : 'password'" placeholder="Enter your password"
-                            class="w-full pl-10 pr-10" />
+                            <Input id="password" name="password" :type="showPassword ? 'text' : 'password'"
+                                autocomplete="new-password" placeholder="Create a password"
+                                class="w-full pl-10 pr-10" />
 
-                        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                            @click="toggleShowPassword">
-                            <AiOutlineEye v-if="showPassword" class="w-5 h-5" />
-                            <CiEyeOff v-else class="w-5 h-5" />
-                        </button>
+                            <button type="button"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-slate-500 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                @click="toggleShowPassword" aria-label="Toggle password visibility"
+                                :aria-pressed="showPassword">
+                                <AiOutlineEye v-if="showPassword" class="w-5 h-5" />
+                                <CiEyeOff v-else class="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <p class="text-xs text-slate-500 ps-1">
+                            Use at least 8 characters with a mix of letters and numbers.
+                        </p>
                     </div>
-                </div>
 
-                <div class="flex flex-col gap-2">
-                    <Label class="ps-[5%]">Confirm Password</Label>
-                    <div class="relative w-[90%] mx-auto">
-                        <BxSolidLockAlt class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2" />
+                    <div class="space-y-2">
+                        <Label class="ps-1 text-slate-700" for="confirmPassword">Confirm Password</Label>
+                        <div class="relative">
+                            <BxSolidLockAlt
+                                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
 
-                        <Input :type="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm your password"
-                            class="w-full pl-10 pr-10" />
+                            <Input id="confirmPassword" name="confirmPassword"
+                                :type="showConfirmPassword ? 'text' : 'password'" autocomplete="new-password"
+                                placeholder="Confirm your password" class="w-full pl-10 pr-10" />
 
-                        <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                            @click="toggleShowConfirmPassword">
-                            <AiOutlineEye v-if="showConfirmPassword" class="w-5 h-5" />
-                            <CiEyeOff v-else class="w-5 h-5" />
-                        </button>
+                            <button type="button"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-slate-500 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                @click="toggleShowConfirmPassword" aria-label="Toggle confirm password visibility"
+                                :aria-pressed="showConfirmPassword">
+                                <AiOutlineEye v-if="showConfirmPassword" class="w-5 h-5" />
+                                <CiEyeOff v-else class="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <Button class="w-[90%] mx-auto cursor-pointer">
-                    Sign Up
-                </Button>
-            </div>
+                    <Button class="w-full cursor-pointer mt-2">
+                        Sign Up
+                    </Button>
+                </section>
 
-            <div id="footer" class="pe-[5%] -mt-3">
-                <p class="text-end text-sm text-gray-500">
-                    Already have an account?
-                    <a class="font-semibold hover:underline cursor-pointer text-black" href="/login">
-                        Sign In
-                    </a>
-                </p>
-            </div>
-        </form>
-    </div>
+                <footer class="pt-1">
+                    <p class="text-center text-sm text-slate-500">
+                        Already have an account?
+                        <a class="font-semibold text-slate-900 hover:underline" href="/login">
+                            Sign In
+                        </a>
+                    </p>
+                </footer>
+            </form>
+        </div>
+    </main>
 </template>
+
 
 <style scoped></style>
