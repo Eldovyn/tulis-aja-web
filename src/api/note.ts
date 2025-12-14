@@ -28,4 +28,13 @@ export const noteService = {
         });
         return { response: response, data: response.data };
     },
+    async updateNote(id: string, input: NoteInput, token: string) {
+        const response = await axiosInstance.patch(`/note/${id}`, input, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+        return { response: response, data: response.data };
+    },
 };

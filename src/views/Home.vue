@@ -108,6 +108,33 @@ const onDelete = async () => {
     isSubmitting.value = false;
 }
 
+const onEdit = async () => {
+    if (isSubmitting.value) return;
+    isSubmitting.value = true;
+
+    const { response, data } = await noteService.updateNote(selectedCard.value?.id ?? '', form, accessToken)
+    if (response.status !== 201) {
+        cards.value = cards.value.map((card) => {
+            if (card.id === selectedCard.value?.id) {
+                return {
+                    ...card,
+                    title: form.title,
+                    content: form.content,
+                    summary: form.summary,
+                }
+            }
+            return card
+        })
+        toast.success(data.message)
+    } else {
+        toast.error(data.message)
+    }
+
+    closeDialog();
+    selectedCard.value = null
+    isSubmitting.value = false;
+}
+
 const { data, isSuccess } = useGetAllNotes(accessToken ?? '')
 
 watchEffect(() => {
@@ -202,7 +229,7 @@ watchEffect(() => {
                         </p>
                     </DialogHeader>
 
-                    <form class="mt-4 flex flex-col gap-4" @submit.prevent="onSubmit">
+                    <form class="mt-4 flex flex-col gap-4" @submit.prevent="!selectedCard && onSubmit()">
                         <div class="grid gap-4">
                             <div class="grid gap-2">
                                 <Label class="text-slate-700">Title</Label>
@@ -246,7 +273,11 @@ watchEffect(() => {
                                         @click="closeDialog">
                                         Cancel
                                     </Button>
-                                    <Button class="w-full sm:w-auto gap-2" type="submit">
+                                    <Button class="w-full sm:w-auto gap-2" type="submit" v-if="!selectedCard">
+                                        <BxRegularSave class="mr-0" />
+                                        Save
+                                    </Button>
+                                    <Button class="w-full sm:w-auto gap-2" type="button" @click="onEdit" v-else>
                                         <BxRegularSave class="mr-0" />
                                         Save
                                     </Button>
