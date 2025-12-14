@@ -24,24 +24,32 @@ import { Badge } from '@/components/ui/badge';
 import { cards, selectedCard } from '@/stores/card';
 import { ref, reactive } from 'vue';
 import { BxRegularTrash, BxSolidBot } from 'vue-icons-lib/bx'
+import { noteService } from '@/api/note';
+import { useMutation } from '@tanstack/vue-query';
+import { toast } from 'vue-sonner';
+import { useCookies } from '@/composables/useCookies';
+import { AxiosError } from 'axios';
+
+const cookies = useCookies()
+const accessToken = cookies.get('accessToken')
 
 const isOpen = ref(false);
 const isSubmitting = ref(false);
 
 const form = reactive({
     title: '',
-    note: '',
+    content: '',
 });
 
 const openDialog = (card?: Card) => {
     if (card) {
         selectedCard.value = card;
         form.title = card.title;
-        form.note = card.description;
+        form.content = card.description;
     } else {
         selectedCard.value = null;
         form.title = '';
-        form.note = '';
+        form.content = '';
     }
 
     isOpen.value = true;
@@ -51,13 +59,30 @@ const closeDialog = () => {
     isOpen.value = false;
     selectedCard.value = null;
     form.title = '';
-    form.note = '';
+    form.content = '';
 };
+
+const { mutate } = useMutation({
+    mutationFn: async (input: NoteInput) => {
+        const { data } = await noteService.createNote(input, accessToken)
+        return data
+    },
+    onError: async (error: AxiosError<ErrorResponseLogin>) => {
+        const { response } = error
+        const message = response?.data.message
+        toast.error(message || 'something went wrong')
+    },
+    onSuccess: async (data: SuccessResponseLogin) => {
+        const { message } = data
+        toast.success(message)
+    },
+})
 
 const onSubmit = () => {
     if (isSubmitting.value) return;
     isSubmitting.value = true;
 
+    mutate({ ...form })
     closeDialog();
     isSubmitting.value = false;
 };
@@ -153,11 +178,11 @@ const onSubmit = () => {
 
                             <div class="grid gap-2">
                                 <Label class="text-slate-700">Note</Label>
-                                <Textarea v-model="form.note" placeholder="Write your note here…"
+                                <Textarea v-model="form.content" placeholder="Write your note here…"
                                     class="min-h-[110px] w-full" />
                             </div>
 
-                            <Separator />
+                            <Separator v-if="selectedCard" />
 
                             <div class="rounded-2xl border bg-slate-50 p-4" v-if="selectedCard">
                                 <div class="mb-2 flex items-center justify-between">
@@ -168,7 +193,7 @@ const onSubmit = () => {
                                     <span class="text-xs text-slate-500">Generated preview</span>
                                 </div>
 
-                                <Textarea v-model="form.note" placeholder="AI summary will appear here…"
+                                <Textarea v-model="form.content" placeholder="AI summary will appear here…"
                                     class="min-h-[90px] w-full" />
                             </div>
                         </div>

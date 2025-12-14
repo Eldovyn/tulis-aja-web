@@ -56,3 +56,12 @@ declare interface ErrorResponseRegister {
 declare interface SuccessResponseRegister {
     message: string;
 }
+
+declare interface NoteInput {
+    title: string;
+    content: string;
+}
+
+declare interface SuccessResponseNote {
+    message: string;
+}
