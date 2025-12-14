@@ -36,7 +36,9 @@ declare interface ErrorResponseLogin {
 }
 
 declare interface SuccessResponseLogin {
-    token: string;
+    message: string;
+    token: Token;
+    data: User;
 }
 
 declare interface RegisterInput {
@@ -53,6 +55,4 @@ declare interface ErrorResponseRegister {
 
 declare interface SuccessResponseRegister {
     message: string;
-    token: Token;
-    data: User;
 }

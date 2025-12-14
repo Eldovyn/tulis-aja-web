@@ -9,6 +9,17 @@ import { CiEyeOff } from 'vue-icons-lib/ci'
 import { authService } from '@/api/auth';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/vue-query';
+import { toast } from 'vue-sonner';
+import { useRouter } from 'vue-router';
+import { useCookies } from '@/composables/useCookies';
+
+const cookies = useCookies()
+
+const router = useRouter()
+
+const goToHome = () => {
+    router.push('/')
+}
 
 const inputLogin = reactive<LoginInput>({
     email: '',
@@ -31,10 +42,15 @@ const { mutate } = useMutation({
         return data
     },
     onError: async (error: AxiosError<ErrorResponseLogin>) => {
-        console.log(error)
+        const { response } = error
+        const message = response?.data.message
+        toast.error(message || 'something went wrong')
     },
     onSuccess: async (data: SuccessResponseLogin) => {
-        console.log(data)
+        const { message, token } = data
+        toast.success(message)
+        cookies.set('accessToken', token.access_token)
+        goToHome()
     },
 })
 
@@ -70,7 +86,7 @@ const onSubmit = () => {
                             <AiOutlineMail
                                 class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
 
-                            <Input id="email" type="email" inputmode="email" autocomplete="email"
+                            <Input id="email" type="text" inputmode="email" autocomplete="email"
                                 placeholder="name@example.com" class="w-full pl-10" v-model="inputLogin.email" />
                         </div>
                     </div>
