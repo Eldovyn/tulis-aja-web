@@ -10,4 +10,13 @@ export const noteService = {
         });
         return { response: response, data: response.data };
     },
+    async getNotes(token: string) {
+        const response = await axiosInstance.get('/note', {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+        return { response: response, data: response.data };
+    },
 };

@@ -1,8 +1,12 @@
 declare interface Card {
-    id: number;
-    title: string;
-    description: string;
-    tags: string[];
+    id?: string;
+    title?: string;
+    content?: string;
+    summary?: string;
+    created_at?: ISODateString;
+    updated_at?: ISODateString;
+    deleted_at?: ISODateString;
+    tags?: string[];
 }
 
 declare interface User {
@@ -63,5 +67,10 @@ declare interface NoteInput {
 }
 
 declare interface SuccessResponseNote {
+    message: string;
+    data: Card;
+}
+
+declare interface ErrorResponseNote {
     message: string;
 }

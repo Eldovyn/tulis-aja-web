@@ -22,13 +22,14 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cards, selectedCard } from '@/stores/card';
-import { ref, reactive } from 'vue';
+import { ref, reactive, watchEffect } from 'vue';
 import { BxRegularTrash, BxSolidBot } from 'vue-icons-lib/bx'
 import { noteService } from '@/api/note';
 import { useMutation } from '@tanstack/vue-query';
 import { toast } from 'vue-sonner';
 import { useCookies } from '@/composables/useCookies';
 import { AxiosError } from 'axios';
+import { useGetAllNotes } from '@/composables/useNote';
 
 const cookies = useCookies()
 const accessToken = cookies.get('accessToken')
@@ -39,17 +40,20 @@ const isSubmitting = ref(false);
 const form = reactive({
     title: '',
     content: '',
+    summary: '',
 });
 
 const openDialog = (card?: Card) => {
     if (card) {
         selectedCard.value = card;
-        form.title = card.title;
-        form.content = card.description;
+        form.title = (card.title ?? '') as string;
+        form.content = (card.content ?? '') as string;
+        form.summary = (card.summary ?? '') as string;
     } else {
         selectedCard.value = null;
         form.title = '';
         form.content = '';
+        form.summary = '';
     }
 
     isOpen.value = true;
@@ -67,13 +71,14 @@ const { mutate } = useMutation({
         const { data } = await noteService.createNote(input, accessToken)
         return data
     },
-    onError: async (error: AxiosError<ErrorResponseLogin>) => {
+    onError: async (error: AxiosError<ErrorResponseNote>) => {
         const { response } = error
         const message = response?.data.message
         toast.error(message || 'something went wrong')
     },
-    onSuccess: async (data: SuccessResponseLogin) => {
-        const { message } = data
+    onSuccess: async (data: SuccessResponseNote) => {
+        const { message, data: card } = data
+        cards.value = [card, ...cards.value]
         toast.success(message)
     },
 })
@@ -86,6 +91,18 @@ const onSubmit = () => {
     closeDialog();
     isSubmitting.value = false;
 };
+
+const { data, isSuccess } = useGetAllNotes(accessToken ?? '')
+
+watchEffect(() => {
+    if (!isSuccess.value) return
+
+    const payload = data.value as any
+    const notes =
+        Array.isArray(payload) ? payload : (payload?.data ?? [])
+
+    cards.value = notes.slice().reverse()
+})
 </script>
 
 <template>
@@ -146,7 +163,7 @@ const onSubmit = () => {
                         </CardHeader>
 
                         <CardContent class="text-sm text-slate-600 leading-relaxed line-clamp-4">
-                            {{ card.description }}
+                            {{ card.content }}
                         </CardContent>
 
                         <CardFooter class="flex flex-row flex-wrap gap-2 pt-4">
@@ -193,7 +210,7 @@ const onSubmit = () => {
                                     <span class="text-xs text-slate-500">Generated preview</span>
                                 </div>
 
-                                <Textarea v-model="form.content" placeholder="AI summary will appear here…"
+                                <Textarea v-model="form.summary" placeholder="AI summary will appear here…" readonly
                                     class="min-h-[90px] w-full" />
                             </div>
                         </div>
