@@ -71,7 +71,7 @@ const onSubmit = () => {
                                 class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
 
                             <Input id="email" type="email" inputmode="email" autocomplete="email"
-                                placeholder="name@company.com" class="w-full pl-10" v-model="inputLogin.email" />
+                                placeholder="name@example.com" class="w-full pl-10" v-model="inputLogin.email" />
                         </div>
                     </div>
 

@@ -43,7 +43,7 @@ function toggleShowConfirmPassword() {
                             <AiOutlineMail
                                 class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                             <Input id="email" name="email" type="email" inputmode="email" autocomplete="email"
-                                placeholder="name@company.com" class="w-full pl-10" />
+                                placeholder="name@example.com" class="w-full pl-10" />
                         </div>
                     </div>
 
