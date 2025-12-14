@@ -151,7 +151,7 @@ watchEffect(() => {
 <template>
     <main class="pt-16">
         <div class="min-h-[calc(100vh-4rem)] w-full bg-slate-50">
-            <section class="sticky top-16 z-10 border-b bg-slate-50/80 backdrop-blur">
+            <section class="sticky top-16 z-10 border-b bg-slate-50/80 backdrop-blur pt-3">
                 <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 py-4">
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div class="min-w-0">
