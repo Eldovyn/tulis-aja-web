@@ -5,6 +5,22 @@ declare interface Card {
     tags: string[];
 }
 
+declare interface User {
+    avatar: string;
+    created_at: string;
+    email: string;
+    id: string;
+    is_active: boolean;
+    provider: string;
+    role: string;
+    updated_at: string;
+}
+
+declare interface Token {
+    access_token: string;
+    created_at: string;
+}
+
 declare interface Contoh1Contract {
     nama(): Promise<string>;
 }
@@ -21,4 +37,22 @@ declare interface ErrorResponseLogin {
 
 declare interface SuccessResponseLogin {
     token: string;
+}
+
+declare interface RegisterInput {
+    username: string;
+    email: string;
+    password: string;
+    confirm_password: string;
+    provider: string;
+}
+
+declare interface ErrorResponseRegister {
+    message: string;
+}
+
+declare interface SuccessResponseRegister {
+    message: string;
+    token: Token;
+    data: User;
 }
