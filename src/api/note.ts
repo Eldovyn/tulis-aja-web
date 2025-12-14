@@ -19,4 +19,13 @@ export const noteService = {
         });
         return { response: response, data: response.data };
     },
+    async deleteNote(id: string, token: string) {
+        const response = await axiosInstance.delete(`/note/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+        return { response: response, data: response.data };
+    },
 };

@@ -92,6 +92,22 @@ const onSubmit = () => {
     isSubmitting.value = false;
 };
 
+const onDelete = async () => {
+    if (isSubmitting.value) return;
+    isSubmitting.value = true;
+
+    const { response, data } = await noteService.deleteNote(selectedCard.value?.id ?? '', accessToken)
+    if (response.status !== 201) {
+        cards.value = cards.value.filter((card) => card.id !== selectedCard.value?.id)
+        toast.success(data.message)
+    } else {
+        toast.error(data.message)
+    }
+
+    closeDialog();
+    isSubmitting.value = false;
+}
+
 const { data, isSuccess } = useGetAllNotes(accessToken ?? '')
 
 watchEffect(() => {
@@ -218,7 +234,8 @@ watchEffect(() => {
                         <Separator />
 
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <Button variant="destructive" type="button" v-if="selectedCard" class="gap-2">
+                            <Button variant="destructive" type="button" v-if="selectedCard" @click="onDelete"
+                                class="gap-2">
                                 <BxRegularTrash class="mr-0" />
                                 Delete
                             </Button>
