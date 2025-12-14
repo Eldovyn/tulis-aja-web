@@ -13,6 +13,7 @@
     "@vueuse/core": "^14.1.0",
     "@web3-onboard/injected-wallets": "^2.11.3",
     "@web3-onboard/vue": "^2.10.0",
+    "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "ethers": "^6.16.0",
