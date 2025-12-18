@@ -80,6 +80,7 @@ const { mutate } = useMutation({
         const { message, data: card } = data
         cards.value = [card, ...cards.value]
         toast.success(message)
+        closeDialog();
     },
 })
 
@@ -88,7 +89,6 @@ const onSubmit = () => {
     isSubmitting.value = true;
 
     mutate({ ...form })
-    closeDialog();
     isSubmitting.value = false;
 };
 
